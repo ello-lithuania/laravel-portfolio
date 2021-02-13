@@ -1,32 +1,96 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
+(function ($) {
+	'use strict';
 
-require('./bootstrap');
+	// Preloader js    
+	$(window).on('load', function () {
+		$('.preloader').fadeOut(700);
+	});
 
-window.Vue = require('vue').default;
+	// Sticky Menu
+	$(window).scroll(function () {
+		var height = $('.top-header').innerHeight();
+		if ($('header').offset().top > 10) {
+			$('.top-header').addClass('hide');
+			$('.navigation').addClass('nav-bg');
+			$('.navigation').css('margin-top', '-' + height + 'px');
+		} else {
+			$('.top-header').removeClass('hide');
+			$('.navigation').removeClass('nav-bg');
+			$('.navigation').css('margin-top', '-' + 0 + 'px');
+		}
+	});
 
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
+	// Background-images
+	$('[data-background]').each(function () {
+		$(this).css({
+			'background-image': 'url(' + $(this).data('background') + ')'
+		});
+	});
 
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+	//Hero Slider
+	$('.hero-slider').slick({
+		autoplay: true,
+		autoplaySpeed: 7500,
+		pauseOnFocus: false,
+		pauseOnHover: false,
+		infinite: true,
+		arrows: true,
+		fade: true,
+		prevArrow: '<button type=\'button\' class=\'prevArrow\'><i class=\'ti-angle-left\'></i></button>',
+		nextArrow: '<button type=\'button\' class=\'nextArrow\'><i class=\'ti-angle-right\'></i></button>',
+		dots: true
+	});
+	$('.hero-slider').slickAnimation();
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+	// venobox popup
+	$(document).ready(function () {
+		$('.venobox').venobox();
+	});
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
 
-const app = new Vue({
-    el: '#app',
-});
+	// filter
+	$(document).ready(function () {
+		var containerEl = document.querySelector('.filtr-container');
+		var filterizd;
+		if (containerEl) {
+			filterizd = $('.filtr-container').filterizr({});
+		}
+		//Active changer
+		$('.filter-controls li').on('click', function () {
+			$('.filter-controls li').removeClass('active');
+			$(this).addClass('active');
+		});
+	});
+
+	//  Count Up
+	function counter() {
+		var oTop;
+		if ($('.count').length !== 0) {
+			oTop = $('.count').offset().top - window.innerHeight;
+		}
+		if ($(window).scrollTop() > oTop) {
+			$('.count').each(function () {
+				var $this = $(this),
+					countTo = $this.attr('data-count');
+				$({
+					countNum: $this.text()
+				}).animate({
+					countNum: countTo
+				}, {
+					duration: 1000,
+					easing: 'swing',
+					step: function () {
+						$this.text(Math.floor(this.countNum));
+					},
+					complete: function () {
+						$this.text(this.countNum);
+					}
+				});
+			});
+		}
+	}
+	$(window).on('scroll', function () {
+		counter();
+	});
+
+})(jQuery);
