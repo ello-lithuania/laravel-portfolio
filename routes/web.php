@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BookController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -20,5 +21,13 @@ Route::resource('/', FrontController::class);
 
 Auth::routes();
 
-Route::resource('home', AdminController::class);
+Route::group(['middleware' => 'auth'], function() {
+    Route::resource('dashboard', AdminController::class);
 
+    Route::group(['prefix' => 'user', 'as' => 'user.'], function() {
+        Route::resource('books', BookController::class);
+    });
+});
+
+
+//require __DIR__.'\auth.php';

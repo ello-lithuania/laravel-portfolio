@@ -13,12 +13,12 @@
           <div class="container-fluid">
             <div class="row mb-2">
               <div class="col-sm-6">
-                <h1 class="m-0">Add Book</h1>
+                <h1 class="m-0">All Books</h1>
               </div><!-- /.col -->
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                  <li class="breadcrumb-item"><a href="{{route('home.index')}}">Home</a></li>
-                  <li class="breadcrumb-item active">Add book</li>
+                  <li class="breadcrumb-item"><a href="{{route('dashboard.index')}}">Home</a></li>
+                  <li class="breadcrumb-item active">All books</li>
                 </ol>
               </div><!-- /.col -->
             </div><!-- /.row -->
@@ -33,7 +33,14 @@
           <!-- Main row -->
           <div class="row">
             <div class="col-md-12">
-                admin
+              
+              @if(session('message'))
+                <div class="alert alert-success" role="alert">
+                  {{ session('message')}}
+                </div>
+              @endif
+
+                <a class="btn btn-lg btn-primary" href="{{route('user.books.create')}}">Add New Book</a>
             </div>
 
   
