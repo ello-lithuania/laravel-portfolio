@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Book;
 
 class FrontController extends Controller
 {
@@ -13,7 +14,8 @@ class FrontController extends Controller
      */
     public function index()
     {
-        return view('front.main');
+        $book_data = Book::paginate('25');
+        return view('front.main', compact('book_data'));
     }
 
     /**

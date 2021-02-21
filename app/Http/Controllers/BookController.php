@@ -8,6 +8,7 @@ use App\Http\Requests\StoreBookRequest;
 use App\Models\Author;
 use App\Models\Book;
 use App\Models\Genre;
+use Intervention\Image\Facades\Image as Image;
 
 class BookController extends Controller
 {
@@ -40,16 +41,25 @@ class BookController extends Controller
      */
     public function store(StoreBookRequest $request)
     {
-        // user model function books relationship
-        $book = auth()->user()->books()->create($request->validated());
+        $data = $request->validated();
+        $data['cover'] = $request->hasFile('cover') ? $this->uploadCover($request->file('cover')) : null;
+
+        $book = auth()->user()->books()->create($data);
         $book->genres()->attach($request->input('genres'));
 
         $author = Author::updateOrCreate(['name'=> $request->input('authors')]);
         $book->authors()->attach($author->id);
 
-        return redirect()->route('user.books.index')->with('message', 'Book Created Successfully');
+        return redirect()->route('dashboard.index')->with('message', 'Book Created Successfully');
     }
+    private function uploadCover($cover) {
+        $coverName = auth()->user()->id . '_' . time() . '.' . $cover->getClientOriginalExtension();
+        $destinationPath = public_path('images/book_covers') . '/' . $coverName;
+        $resize_image = Image::make($cover->getRealPath());
+        $resize_image ->resize(400,700)->save($destinationPath);
 
+        return $coverName;
+    }
     /**
      * Display the specified resource.
      *

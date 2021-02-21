@@ -41,7 +41,37 @@
               @endif
 
                 <a class="btn btn-lg btn-primary" href="{{route('user.books.create')}}">Add New Book</a>
+ 
             </div>
+          </div>
+
+          <div class="row mt-3">
+
+            @foreach ($book_data as $book)
+            <div class="col-md-3 col-6">
+              <div class="card">
+                <img class="card-img-top" src="{{($book->cover!==NULL) ? asset('images/book_covers/' . $book->cover) : 'https://upload.wikimedia.org/wikipedia/commons/8/84/Example.svg' }}" alt="Card image cap">
+                <div class="card-body">
+                  <h5 class="card-title">{{$book->title}}</h5>
+                  <hr/>
+                  <p>Price: {{(!$book->discount) ? $book->price :  $book->price - ($book->price * ($book->discount / 100)) }} $</p>
+                  @if(count($book->genres) > 0)
+                  <p>Genre:
+                  @foreach($book->genres as $genre)
+                    {{$genre->name}},
+                  @endforeach
+                  </p>
+                  @endif
+                  <p class="card-text">{{$book->description}}</p>
+                  <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+              </div>
+            </div>
+            @endforeach
+            <div class="col-md-12">
+              {{ $book_data->links() }}
+            </div>
+          </div>
 
   
 

@@ -1,3 +1,4 @@
+
 @extends('front.layout.app')
 
 @section('title')
@@ -169,136 +170,86 @@
 
 <!-- courses -->
 <section class="section-sm">
-  <div class="container">
+  <div class="container-fluid">
     <div class="row">
       <div class="col-12">
         <div class="d-flex align-items-center section-title justify-content-between">
           <h2 class="mb-0 text-nowrap mr-3">Our Books</h2>
           <div class="border-top w-100 border-primary d-none d-sm-block"></div>
-          <div>
+          <div class="hidden">
             <a href="courses.html" class="btn btn-sm btn-primary-outline ml-sm-3 d-none d-sm-block">see all</a>
           </div>
         </div>
       </div>
     </div>
     <!-- course list -->
-<div class="row justify-content-center">
+@php $count = 0; @endphp
+
+@foreach($book_data as $book)
+  @if($count == 0 || $count == 5 || $count == 10 || $count == 15 || $count == 20 || $count == 25)
+  <div class="row justify-content-center">
+  @endif
+
   <!-- course item -->
-  <div class="col-lg-4 col-sm-6 mb-5">
+  <div class="col-2 mb-5">
     <div class="card p-0 border-primary rounded-0 hover-shadow">
-      <img class="card-img-top rounded-0" src="images/courses/course-1.jpg" alt="course thumb">
+      <img class="card-img-top rounded-0" src="{{($book->cover!==NULL) ? asset('images/book_covers/' . $book->cover) : 'https://upload.wikimedia.org/wikipedia/commons/8/84/Example.svg' }}" alt="course thumb">
       <div class="card-body">
         <ul class="list-inline mb-2">
-          <li class="list-inline-item"><i class="ti-calendar mr-1 text-color"></i>02-14-2018</li>
-          <li class="list-inline-item"><a class="text-color" href="#">Humanities</a></li>
+          @if($book->is_new)
+          <li class="list-inline-item my-3">
+            <span class="bg-primary p-1">New</span>
+          </li>
+          <br/>
+          @endif
+          <li class="list-inline-item"><i class="ti-calendar mr-1 text-color"></i>{{$book->created_at->format('Y-m-d')}}</li>
+          <li class="list-inline-item" style="width: 100%;">
+            @if(count($book->genres) > 0)
+            <p style="width: 100%;">Author:
+            @foreach( $book->authors as $author)
+              {{$author->name}},
+            @endforeach
+            </p>
+            @endif
+          </li>
+          <li class="list-inline-item">
+            @if(count($book->genres) > 0)
+            <p>Genre:
+            @foreach($book->genres as $genre)
+              {{$genre->name}},
+            @endforeach
+            </p>
+            @endif
+          </li>
         </ul>
         <a href="course-single.html">
-          <h4 class="card-title">Photography</h4>
+          <h4 class="card-title">{{$book->title}}</h4>
         </a>
-        <p class="card-text mb-4"> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-          incididunt ut labore et dolore magna.</p>
-        <a href="course-single.html" class="btn btn-primary btn-sm">Apply now</a>
+        <p class="card-text mb-4">{{$book->description}}</p>
+          @if($book->discount) <p class="bg-warning">-{{ $book->discount }}%</p>@endif
+          <p>Price: {{(!$book->discount) ? $book->price :  $book->price - ($book->price * ($book->discount / 100)) }} $</p>
+        <a href="course-single.html" class="btn btn-primary btn-sm">Details</a>
       </div>
     </div>
   </div>
   <!-- course item -->
-  <div class="col-lg-4 col-sm-6 mb-5">
-    <div class="card p-0 border-primary rounded-0 hover-shadow">
-      <img class="card-img-top rounded-0" src="images/courses/course-2.jpg" alt="course thumb">
-      <div class="card-body">
-        <ul class="list-inline mb-2">
-          <li class="list-inline-item"><i class="ti-calendar mr-1 text-color"></i>02-14-2018</li>
-          <li class="list-inline-item"><a class="text-color" href="#">Humanities</a></li>
-        </ul>
-        <a href="course-single.html">
-          <h4 class="card-title">Programming</h4>
-        </a>
-        <p class="card-text mb-4"> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-          incididunt ut labore et dolore magna.</p>
-        <a href="course-single.html" class="btn btn-primary btn-sm">Apply now</a>
-      </div>
-    </div>
+  
+  @if($count == 4 || $count == 9 || $count == 14 || $count == 19 || $count == 25)
   </div>
-  <!-- course item -->
-  <div class="col-lg-4 col-sm-6 mb-5">
-    <div class="card p-0 border-primary rounded-0 hover-shadow">
-      <img class="card-img-top rounded-0" src="images/courses/course-3.jpg" alt="course thumb">
-      <div class="card-body">
-        <ul class="list-inline mb-2">
-          <li class="list-inline-item"><i class="ti-calendar mr-1 text-color"></i>02-14-2018</li>
-          <li class="list-inline-item"><a class="text-color" href="#">Humanities</a></li>
-        </ul>
-        <a href="course-single.html">
-          <h4 class="card-title">Lifestyle Archives</h4>
-        </a>
-        <p class="card-text mb-4"> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-          incididunt ut labore et dolore magna.</p>
-        <a href="course-single.html" class="btn btn-primary btn-sm">Apply now</a>
-      </div>
-    </div>
-  </div>
-  <!-- course item -->
-  <div class="col-lg-4 col-sm-6 mb-5">
-    <div class="card p-0 border-primary rounded-0 hover-shadow">
-      <img class="card-img-top rounded-0" src="images/courses/course-4.jpg" alt="course thumb">
-      <div class="card-body">
-        <ul class="list-inline mb-2">
-          <li class="list-inline-item"><i class="ti-calendar mr-1 text-color"></i>02-14-2018</li>
-          <li class="list-inline-item"><a class="text-color" href="#">Humanities</a></li>
-        </ul>
-        <a href="course-single.html">
-          <h4 class="card-title">Complete Freelancing</h4>
-        </a>
-        <p class="card-text mb-4"> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-          incididunt ut labore et dolore magna.</p>
-        <a href="course-single.html" class="btn btn-primary btn-sm">Apply now</a>
-      </div>
-    </div>
-  </div>
-  <!-- course item -->
-  <div class="col-lg-4 col-sm-6 mb-5">
-    <div class="card p-0 border-primary rounded-0 hover-shadow">
-      <img class="card-img-top rounded-0" src="images/courses/course-5.jpg" alt="course thumb">
-      <div class="card-body">
-        <ul class="list-inline mb-2">
-          <li class="list-inline-item"><i class="ti-calendar mr-1 text-color"></i>02-14-2018</li>
-          <li class="list-inline-item"><a class="text-color" href="#">Humanities</a></li>
-        </ul>
-        <a href="course-single.html">
-          <h4 class="card-title">Branding Design</h4>
-        </a>
-        <p class="card-text mb-4"> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-          incididunt ut labore et dolore magna.</p>
-        <a href="course-single.html" class="btn btn-primary btn-sm">Apply now</a>
-      </div>
-    </div>
-  </div>
-  <!-- course item -->
-  <div class="col-lg-4 col-sm-6 mb-5">
-    <div class="card p-0 border-primary rounded-0 hover-shadow">
-      <img class="card-img-top rounded-0" src="images/courses/course-6.jpg" alt="course thumb">
-      <div class="card-body">
-        <ul class="list-inline mb-2">
-          <li class="list-inline-item"><i class="ti-calendar mr-1 text-color"></i>02-14-2018</li>
-          <li class="list-inline-item"><a class="text-color" href="#">Humanities</a></li>
-        </ul>
-        <a href="course-single.html">
-          <h4 class="card-title">Art Design</h4>
-        </a>
-        <p class="card-text mb-4"> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-          incididunt ut labore et dolore magna.</p>
-        <a href="course-single.html" class="btn btn-primary btn-sm">Apply now</a>
-      </div>
-    </div>
-  </div>
-</div>
+  @endif
+
+@php $count++; @endphp
+
+@endforeach
+
 <!-- /course list -->
     <!-- mobile see all button -->
     <div class="row">
       <div class="col-12 text-center">
-        <a href="courses.html" class="btn btn-sm btn-primary-outline d-sm-none d-inline-block">sell all</a>
+        {{ $book_data->links() }}
       </div>
     </div>
+
   </div>
 </section>
 <!-- /courses -->

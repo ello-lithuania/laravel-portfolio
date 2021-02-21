@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::resource('/', FrontController::class);
+Route::get('/', [FrontController::class, 'index'])->name('home');
 
 Auth::routes();
 

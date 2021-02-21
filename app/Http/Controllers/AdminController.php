@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Book;
 
 class AdminController extends Controller
 {
@@ -13,7 +14,8 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('admin.main');
+        $book_data = Book::paginate(15);
+        return view('admin.main',compact('book_data'));
     }
 
     /**

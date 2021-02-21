@@ -954,3 +954,8 @@ link:focus,
 .filter-controls li:hover {
   color: #ffbc3b;
 }
+
+/* custom code */
+.hidden {
+  display: none !important;
+}
