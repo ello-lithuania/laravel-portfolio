@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Book;
+use Illuminate\Support\Facades\Cookie;
 
 class FrontController extends Controller
 {
@@ -14,10 +15,17 @@ class FrontController extends Controller
      */
     public function index()
     {
-        $book_data = Book::paginate('25');
+        $book_data = Book::when(request('search'),function ($query){
+            $search = request('search');
+            Cookie::queue('search',$search);
+            $query->orWhere('title','LIKE',"%{$search}%")
+                  ->orWhere('description','LIKE',"%{$search}%")
+                  ->orWhereHas('authors',function ($query) use ($search) {
+                      $query->where('name','LIKE',"%{$search}%");
+                  });
+        })->latest()->paginate('25');
         return view('front.main', compact('book_data'));
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -47,7 +55,9 @@ class FrontController extends Controller
      */
     public function show($id)
     {
-        //
+        $book = Book::with(['authors','genres'])->withAvg('bookReviews','stars')->findOrFail($id);
+        $reviews = $book->bookReviews()->with(['user'])->simplePaginate();
+        return view('front.components.book.show', compact('book', 'reviews'));
     }
 
     /**

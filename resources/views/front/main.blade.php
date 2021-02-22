@@ -2,126 +2,13 @@
 @extends('front.layout.app')
 
 @section('title')
-    Book Shop
+    Book shop
 @endsection
 
 @section('content')
 
-<!-- Modal -->
-<div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content rounded-0 border-0 p-4">
-            <div class="modal-header border-0">
-                <h3>{{ __('Register') }}</h3>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="login">
-                  <form method="POST" action="{{ route('register') }}" class="row">
-                    @csrf
-                        <div class="col-12">
-                          <label>{{ __('Name') }}</label>
-                            <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
-
-                            @error('name')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                        <div class="col-12">
-                          <label>{{ __('E-Mail Address') }}</label>
-                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
-                            
-                            @error('email')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                        <div class="col-12">
-                            <label>{{ __('Password') }}</label>
-                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
-
-
-                            @error('password')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                        <div class="col-12">
-                          <label>{{ __('Confirm Password') }}</label>
-                            <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
-                        </div>
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-primary">{{ __('Register') }}</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal -->
-<!-- Modal -->
-<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content rounded-0 border-0 p-4">
-            <div class="modal-header border-0">
-                <h3>{{ __('Login') }}</h3>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-              <form method="POST" action="{{ route('login') }}" class="row">
-                @csrf
-                    <div class="col-12">
-                        <label>{{ __('E-Mail Address') }}</label>
-                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-                        @error('email')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                        @enderror
-                    </div>
-                    <div class="col-12">
-                        <label>{{ __('Password') }}</label>
-                        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-                        @error('password')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                        @enderror
-                    </div>
-                    <div class="col-12 form-group">
-                          <div class="form-check">
-                              <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                              <label class="form-check-label" for="remember">
-                                  {{ __('Remember Me') }}
-                              </label>
-                          </div>
-                    </div>
-                    <div class="col-12">
-                        <button type="submit" class="btn btn-primary">{{ __('Login') }}</button>
-                    </div>
-                </form>
-                @if (Route::has('password.request'))
-                <a class="btn btn-link" href="{{ route('password.request') }}">
-                    {{ __('Forgot Your Password?') }}
-                </a>
-                @endif
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- hero slider -->
-<section class="hero-section overlay bg-cover" data-background="images/banner/banner-1.jpg">
+<section class="hero-section overlay bg-cover" data-background="{{ asset('images/banner/banner-1.jpg') }}">
   <div class="container">
     <div class="hero-slider">
       <!-- slider item -->
@@ -185,6 +72,7 @@
     <!-- course list -->
 @php $count = 0; @endphp
 
+@if(count($book_data) > 0)
 @foreach($book_data as $book)
   @if($count == 0 || $count == 5 || $count == 10 || $count == 15 || $count == 20 || $count == 25)
   <div class="row justify-content-center">
@@ -228,7 +116,7 @@
         <p class="card-text mb-4">{{$book->description}}</p>
           @if($book->discount) <p class="bg-warning">-{{ $book->discount }}%</p>@endif
           <p>Price: {{(!$book->discount) ? $book->price :  $book->price - ($book->price * ($book->discount / 100)) }} $</p>
-        <a href="course-single.html" class="btn btn-primary btn-sm">Details</a>
+        <a href="{{ route('book',['id' => $book->id]) }}" class="btn btn-primary btn-sm">Details</a>
       </div>
     </div>
   </div>
@@ -249,6 +137,10 @@
         {{ $book_data->links() }}
       </div>
     </div>
+
+    @else 
+    <h2>Sorry no matches had been found</h2>
+    @endif
 
   </div>
 </section>

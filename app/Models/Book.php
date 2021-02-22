@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Genre;
 use App\Models\Author;
 use App\Models\User;
+use App\Models\Review;
 
 class Book extends Model
 {
@@ -30,6 +31,9 @@ class Book extends Model
     {
         return now()->subDays(7) <= $this->created_at;
     }
-
+    public function bookReviews()
+    {
+        return $this->hasMany(Review::class)->latest();
+    }
 
 }

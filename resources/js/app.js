@@ -60,6 +60,14 @@
 			$('.filter-controls li').removeClass('active');
 			$(this).addClass('active');
 		});
+		$('.register-btn').click(function() {
+			$('#loginModal').css('display','none');
+			$('#modal-backdrop').css('display','none');
+		});
+		$('.login-btn').click(function() {
+			$('#signupModal').css('display','none');
+			$('#modal-backdrop').css('display','none');
+		});
 	});
 
 	//  Count Up
